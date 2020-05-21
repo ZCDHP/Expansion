@@ -4,6 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "test": "tsc -p ./src/scenarioTest.local/ && ./node_modules/.bin/mocha ./dist/scenarioTest.local/"
+  },
   "workspaces": [
     "src/scenarioTest.local"
   ],
