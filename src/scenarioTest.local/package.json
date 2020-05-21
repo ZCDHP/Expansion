@@ -1,0 +1,12 @@
+{
+    "name": "scenarioTest.local",
+    "version": "1.0.0",
+    "dependencies": {
+        "mocha": "^7.1.2",
+        "source-map-support": "^0.5.19"
+    },
+    "devDependencies": {
+        "@types/mocha": "^7.0.2",
+        "@types/node": "^14.0.1"
+    }
+}
