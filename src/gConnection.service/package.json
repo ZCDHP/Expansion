@@ -1,0 +1,12 @@
+{
+    "name": "gConnection.service",
+    "version": "1.0.0",
+    "dependencies": {
+        "ioredis": "^4.17.1",
+        "source-map-support": "^0.5.19",
+        "ts-nats": "^1.2.14"
+    },
+    "devDependencies": {
+        "@types/ioredis": "^4.16.2"
+    }
+}

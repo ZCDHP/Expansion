@@ -1,0 +1,29 @@
+#!/bin/bash
+
+case $1 in 
+    "")
+        files=("web.yml" "connection.yml" "common.yml")
+        ;;
+    GConnection)
+        files=("gConnection.yml" "gConnection.expose.yml" "common.yml")
+        ;;
+    Test-Integration)
+        files=("gConnection.yml"  "common.yml" "scenarioTest.integrated.yml")
+        ;;
+    *)
+        echo "Unknown target [$1]"
+        exit 1
+        ;;
+esac
+
+
+command="docker-compose"
+
+for f in "${files[@]}" 
+do 
+    command=$command" -f compose/$f"
+done
+
+command=$command" up --build"
+
+eval $command

@@ -1,11 +1,9 @@
-require('source-map-support').install();
-
 import { Reduce, Projection } from "../infrastructure/event";
 import * as Report from "../scenarioTest.domain/report";
 
 import { Epic as EpicScript } from '../scenarioTest.domain/script';
 import { CommandHandler as TestingCommandHandler } from '../scenarioTest.domain/commandHandler';
-import { Commands as TestingCommands } from '../scenarioTest.domain/commands';
+import { Command as TestingCommands } from '../scenarioTest.domain/commands';
 import { Event as TestingEvents, Tags as TestingEventTags } from '../scenarioTest.domain/events';
 import { Projection as TestingProjection, Reducer as TestingReducer, State as TestingState } from '../scenarioTest.domain/state';
 

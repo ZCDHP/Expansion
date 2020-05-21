@@ -1,0 +1,23 @@
+version: "3"
+services:
+
+  connection_service:
+    build:
+      context: ../
+      dockerfile: ./src/gConnection.service/Dockerfile
+    container_name: connection_service
+    depends_on:
+      - event_bus_nats
+      - connection_redis
+
+  connection_redis:
+    image: redis:alpine
+    container_name: connection_redis
+    volumes:
+      - ../redis.noPersistence.config:/usr/local/etc/redis/redis.conf
+    command: 
+      - /usr/local/etc/redis/redis.conf
+    sysctls:
+            - net.core.somaxconn=65535
+    expose:
+      - 6379

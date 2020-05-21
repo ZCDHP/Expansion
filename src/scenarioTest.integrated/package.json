@@ -1,0 +1,14 @@
+{
+    "name": "scenarioTest.intergrated",
+    "version": "1.0.0",
+    "dependencies": {
+        "mocha": "^7.1.2",
+        "mochawesome": "^6.1.1",
+        "source-map-support": "^0.5.19",
+        "ts-nats": "^1.2.14"
+    },
+    "devDependencies": {
+        "@types/mocha": "^7.0.2",
+        "@types/node": "^14.0.1"
+    }
+}

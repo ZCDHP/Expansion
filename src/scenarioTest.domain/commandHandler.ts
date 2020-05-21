@@ -2,14 +2,14 @@ import { Never } from '../infrastructure/utils';
 
 import { FindExceptedEventPosition } from './InteractionCursor';
 import { Event as Events } from './events';
-import { Commands as Commands, Tags as CommandTags } from './commands';
+import { Command as Command, Tags as CommandTags } from './commands';
 import { State } from './state';
 import * as History from "./history";
 import { Reason } from './conclusion';
 
 
-export const CommandHandler: <TCommand, TEvent>() => (state: State<TCommand, TEvent>) => (cmd: Commands<TCommand, TEvent>) => Events<TCommand, TEvent>[] =
-    <TCommand, TEvent>() => (state: State<TCommand, TEvent>) => (cmd: Commands<TCommand, TEvent>) => {
+export const CommandHandler: <TCommand, TEvent>() => (state: State<TCommand, TEvent>) => (cmd: Command<TCommand, TEvent>) => Events<TCommand, TEvent>[] =
+    <TCommand, TEvent>() => (state: State<TCommand, TEvent>) => (cmd: Command<TCommand, TEvent>) => {
         switch (cmd.type) {
             case CommandTags.Start: return [Events<TCommand, TEvent>().Started(cmd.data)];
             case CommandTags.PassTime: return [

@@ -1,0 +1,7 @@
+version: "3"
+services:
+
+  connection_service:
+    ports:
+      - 3001:3001
+      

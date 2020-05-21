@@ -20,6 +20,11 @@ export type State =
     | Connected
     | NotConnected
 
+export const State = {
+    Connected,
+    NotConnected,
+}
+
 export const Reducer: Event.Reducer<State, Events.Event> = _state => event => {
     switch (event.type) {
         case Events.Tags.Connected: return Connected();

@@ -1,0 +1,13 @@
+version: "3"
+services:
+
+    testing_service:
+        build:
+          context: ../
+          dockerfile: ./src/scenarioTest.integrated/Dockerfile
+        container_name: testing_service
+        depends_on:
+          - event_bus_nats
+          - connection_service
+        ports:
+          - 8080:8080

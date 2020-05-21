@@ -1,0 +1,7 @@
+version: "3"
+services:
+  event_bus_nats:
+    image: nats
+    container_name: event_bus_nats
+    expose:
+      - 4222 

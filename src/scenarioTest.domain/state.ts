@@ -60,6 +60,7 @@ const NextCommandGenerated: <TCommand, TEvent>(state: State<TCommand, TEvent>, e
     <TCommand, TEvent>(state: State<TCommand, TEvent>, event: Events.NextCommandGenerated<TCommand>) => ({
         ...state,
         histories: {
+            ...state.histories,
             [event.data.id]: [...(state.histories[event.data.id] || []), History.Record<TCommand, TEvent>().Command(event.data.command)]
         },
     });
@@ -68,6 +69,7 @@ const EventVerified: <TCommand, TEvent>(state: State<TCommand, TEvent>, event: E
     <TCommand, TEvent>(state: State<TCommand, TEvent>, event: Events.EventVerified<TEvent>) => ({
         ...state,
         histories: {
+            ...state.histories,
             [event.data.id]: [...(state.histories[event.data.id] || []), History.Record<TCommand, TEvent>().Event(event.data.event)]
         },
     });

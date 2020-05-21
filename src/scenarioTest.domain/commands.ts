@@ -19,12 +19,12 @@ type VerifyTargetEventData<TEvent> = {
 export type VerifyTargetEvent<TEvent> = Union.Case<Tags["VerifyTargetEvent"], VerifyTargetEventData<TEvent>>;
 
 
-export type Commands<TCommand, TEvent> =
+export type Command<TCommand, TEvent> =
     | Start<TCommand, TEvent>
     | PassTime
     | VerifyTargetEvent<TEvent>
 
-export const Commands = <TCommand, TEvent>() => ({
+export const Command = <TCommand, TEvent>() => ({
     Start: Union.Case(Tags.Start)<Epic.Script<TCommand, TEvent>>(),
     PassTime: Union.Case(Tags.PassTime)<number>(),
     VerifyTargetEvent: Union.Case(Tags.VerifyTargetEvent)<VerifyTargetEventData<TEvent>>(),
