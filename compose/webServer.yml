@@ -1,0 +1,21 @@
+version: "3"
+services:
+  nginx: 
+    image: nginx:stable-alpine
+    container_name: nginx
+    volumes:
+      - ../nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 80:80
+    depends_on:
+      - web_server
+
+  web_server:
+    build: 
+      context: ..
+      dockerfile: ./src/webServer/Dockerfile
+    container_name: web_server
+    expose:
+      - 3000
+    depends_on:
+      - event_bus_nats

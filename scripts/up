@@ -2,7 +2,7 @@
 
 case $1 in 
     "")
-        files=("web.yml" "connection.yml" "common.yml")
+        files=("webServer.yml" "gConnection.yml" "common.yml")
         ;;
     GConnection)
         files=("gConnection.yml" "gConnection.expose.yml" "common.yml")

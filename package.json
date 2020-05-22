@@ -10,7 +10,8 @@
   "workspaces": [
     "src/scenarioTest.integrated",
     "src/scenarioTest.local",
-    "src/gConnection.service"
+    "src/gConnection.service",
+    "src/webServer"
   ],
   "dependencies": {
     "typescript": "^3.8.3"
