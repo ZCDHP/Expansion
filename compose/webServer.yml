@@ -14,8 +14,10 @@ services:
     build: 
       context: ..
       dockerfile: ./src/webServer/Dockerfile
+      args:
+        - Env
     container_name: web_server
     expose:
       - 3000
     depends_on:
-      - event_bus_nats
+      - event_bus_nats  

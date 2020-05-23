@@ -1,5 +1,8 @@
 FROM node:lts-alpine
 
+# development | production
+ARG Env=development
+
 WORKDIR /root
 
 # Dependencies 
@@ -16,7 +19,7 @@ COPY src/webServer/ src/webServer/
 COPY src/client/ src/client/
 
 # Build
-ENV NODE_ENV production
+ENV NODE_ENV ${Env}
 RUN node_modules/.bin/tsc -p src/building/tsconfig.json \
     && node_modules/.bin/webpack --config dist/building/webpack.config.js \
     && node_modules/.bin/tsc -p src/webServer/tsconfig.json
