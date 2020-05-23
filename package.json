@@ -12,7 +12,8 @@
     "src/scenarioTest.local",
     "src/gConnection.service",
     "src/webServer",
-    "src/client"
+    "src/client",
+    "src/building"
   ],
   "dependencies": {
     "typescript": "^3.8.3"
