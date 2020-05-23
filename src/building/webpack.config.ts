@@ -42,11 +42,6 @@ const Config = {
             cacheGroups: Bundles.cacheGroups
         }
     },
-    externals: {
-        /* "react": "React",
-        "react-dom": "ReactDOM",
-        "styled-components": "styled" */
-    },
 };
 
 export default Config;
