@@ -3,33 +3,35 @@ import React from "react";
 import ReactDOM from "react-dom/server";
 import { ServerStyleSheet } from 'styled-components';
 
+import { Void } from '../infrastructure/utils';
+
+
 import { Files as Bundles } from "../building/bundles";
 const Manifest: { [key in Bundles]: string } = require("../www/manifest.json");
 
 import InitialState from './initialState';
-import { App } from '../client/app'
-//import * as View from '../client/types/viewState'
-//import { Value as Page } from '../client/types/page'
-//import { Value as GConnection } from "../client/types/gConnection";
+import { AppView } from '../client/components/appView'
 
+import { State as ViewState } from "../client/state";
+import { State as LoginState } from "../client/state.login";
 
-const state = {
-    str: "Hello World"
+const state: ViewState = {
+    login: LoginState.LoggedOut(),
 };
 
-const HTML = (state: { str: string }) => (
+const HTML = (state: ViewState) => (
     <html>
         <head>
             <title>Expansion</title>
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <meta name="description" content="Expansion - The Card Game" />
-            <InitialState state={state} />
+            <InitialState {...state} />
             <script src={`/${Manifest[Bundles.vendor]}`}></script>
             <script src={`/${Manifest[Bundles.app]}`}></script>
         </head>
         <body>
             <div id="app">
-                <App {...state}></App>
+                <AppView state={state} issueCommand={Void} ></AppView>
             </div>
         </body>
     </html>

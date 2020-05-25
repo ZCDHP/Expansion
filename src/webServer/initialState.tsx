@@ -1,6 +1,8 @@
 import React from "react"
 
-const InitialState = ({ state }: { state: any }) => (
+import { State as ViewState } from "../client/state";
+
+const InitialState = (state: ViewState) => (
     <script dangerouslySetInnerHTML={{
         __html: `window.initialState = ${JSON.stringify(state)};`
     }}>
