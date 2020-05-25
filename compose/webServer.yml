@@ -21,3 +21,16 @@ services:
       - 3000
     depends_on:
       - event_bus_nats  
+      - web_redis
+
+  web_redis:
+    image: redis:alpine
+    container_name: web_redis
+    volumes:
+      - ../redis.noPersistence.config:/usr/local/etc/redis/redis.conf
+    command: 
+      - /usr/local/etc/redis/redis.conf
+    sysctls:
+            - net.core.somaxconn=65535
+    expose:
+      - 6379
