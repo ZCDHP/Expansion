@@ -4,6 +4,7 @@ import { Reducer, Projection as Proj } from '../infrastructure/event';
 
 
 import { Event, Tags as EventTags } from './session/events';
+import { Message } from "../client/message.server";
 
 export type State = {
     connection: ws,
@@ -13,7 +14,7 @@ export type State = {
 export const Reduce: Reducer<State, Event> = state => event => {
     switch (event.type) {
         case EventTags.ConnectionRejected:
-            state.connection.send(JSON.stringify(event.data.reason));
+            state.connection.send(JSON.stringify(Message.ConnectionRejected(event.data)));
             return {
                 ...state,
                 close: true,

@@ -1,8 +1,8 @@
 import React from "react";
 import { createGlobalStyle } from "styled-components";
 
-import { State } from "../state";
-import { Command } from "../commands";
+import { State } from "../viewState";
+import { Operation } from "../operations";
 
 const GlobalStyle = createGlobalStyle`
     * {
@@ -14,15 +14,15 @@ const GlobalStyle = createGlobalStyle`
 
 type Props = {
     state: State,
-    issueCommand: (cmd: Command) => void
+    applyOption: (operation: Operation) => void,
 }
 
-export const AppView = ({ state, issueCommand }: Props) => {
+export const AppView = ({ state, applyOption }: Props) => {
     return (
         <>
             <GlobalStyle />
-            <h1>{state.login.type}</h1>
-            <button onClick={_ => issueCommand(Command.Login({ id: 1 }))}> Login </button>
+            <h1>Connection: {JSON.stringify(state.Connection)}</h1>
+            <button onClick={_ => applyOption(Operation.Connection.Connect())}> Login </button>
         </>
     )
 }

@@ -3,21 +3,14 @@ import React from "react";
 import ReactDOM from "react-dom/server";
 import { ServerStyleSheet } from 'styled-components';
 
-import { Void } from '../infrastructure/utils';
-
-
 import { Files as Bundles } from "../building/bundles";
 const Manifest: { [key in Bundles]: string } = require("../www/manifest.json");
 
 import InitialState from './initialState';
 import { AppView } from '../client/components/appView'
 
-import { State as ViewState } from "../client/state";
-import { State as LoginState } from "../client/state.login";
+import { InitialState as InitialViewState, State as ViewState } from "../client/viewState";
 
-const state: ViewState = {
-    login: LoginState.LoggedOut(),
-};
 
 const HTML = (state: ViewState) => (
     <html>
@@ -31,7 +24,7 @@ const HTML = (state: ViewState) => (
         </head>
         <body>
             <div id="app">
-                <AppView state={state} issueCommand={Void} ></AppView>
+                <AppView state={InitialViewState} applyOption={_ => { }}></AppView>
             </div>
         </body>
     </html>
@@ -39,7 +32,7 @@ const HTML = (state: ViewState) => (
 
 const PageStream = () => {
     const sheet = new ServerStyleSheet()
-    const jsx = sheet.collectStyles(HTML(state));
+    const jsx = sheet.collectStyles(HTML(InitialViewState));
     return sheet.interleaveWithNodeStream(ReactDOM.renderToNodeStream(jsx))
 }
 

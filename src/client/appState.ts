@@ -1,7 +1,7 @@
-import { State as ViewState } from './state';
-import { Command } from "./commands";
+import * as ViewState from './viewState';
+import * as ContextualState from './context';
 
 export type State = {
-    viewState: ViewState,
-    issueCommand: (cmd: Command) => void,
-}
+    viewState: ViewState.State,
+    contextualState: ContextualState.State,
+};
