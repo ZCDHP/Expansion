@@ -24,7 +24,7 @@ const HTML = (state: ViewState) => (
         </head>
         <body>
             <div id="app">
-                <AppView state={InitialViewState} applyOption={_ => { }}></AppView>
+                <AppView state={InitialViewState} issueCommand={_ => { }}></AppView>
             </div>
         </body>
     </html>

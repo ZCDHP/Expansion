@@ -1,4 +1,8 @@
 import * as Union from "../infrastructure/union";
+import { Never } from "../infrastructure/utils";
+import * as EventDef from "../infrastructure/event";
+
+import { Event, Tags as EventTags } from "./events.connection";
 
 export const Tags = {
     None: "None",
@@ -28,12 +32,15 @@ export const State = {
 
 export const InitialState: State = State.None();
 
-export type Operation<T> = (v: T) => (state: State) => State;
+export const Reducer: EventDef.Reducer<State, Event> = state => event => {
+    if (event.type == EventTags.Rejected)
+        return State.Failed(event.data);
 
-const Connect: Operation<void> = () => state => state.type == Tags.None ? State.Connecting() : state;
-const Connected: Operation<void> = () => state => state.type == Tags.Connecting ? State.Connected() : state;
-
-export const Operations = {
-    Connect,
-    Connected,
-};
+    switch (state.type) {
+        case Tags.None: return event.type == EventTags.Connecting ? State.Connecting() : state;
+        case Tags.Connecting: return event.type == EventTags.Connected ? State.Connected() : state;
+        case Tags.Connected: return state;
+        case Tags.Failed: return state;
+        default: Never(state);
+    }
+}
