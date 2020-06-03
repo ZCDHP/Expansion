@@ -1,4 +1,4 @@
-import * as Connection from "./context.connection";
+import * as Connection from "./state.connection";
 
 export type State = {
     Connection: Connection.State,

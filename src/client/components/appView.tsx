@@ -1,9 +1,8 @@
 import React from "react";
 import { createGlobalStyle } from "styled-components";
 
-import { State } from "../viewState";
-//import { Operation } from "../operations";
-import { Command } from "../commands";
+import { State } from "../view/state";
+import { Command } from "../view/commands";
 
 const GlobalStyle = createGlobalStyle`
     * {

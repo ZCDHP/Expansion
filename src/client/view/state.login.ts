@@ -1,6 +1,6 @@
-import * as Union from "../infrastructure/union";
-import { Never } from "../infrastructure/utils";
-import * as EventDef from "../infrastructure/event";
+import * as Union from "../../infrastructure/union";
+import { Never } from "../../infrastructure/utils";
+import * as EventDef from "../../infrastructure/event";
 
 import { Event, Tags as EventTags } from "./events.login";
 
@@ -30,7 +30,11 @@ export const InitialState: State = State.None();
 
 export const Reducer: EventDef.Reducer<State, Event> = state => event => {
     switch (state.type) {
-        case Tags.None: return event.type == EventTags.Connecting ? State.Connecting() : state;
+        case Tags.None: switch (event.type) {
+            case EventTags.Connecting: return State.Connecting();
+            case EventTags.CheckingLocalPlayerInfo: return State.CheckingLocalPlayerInfo();
+            default: return state;
+        }
         case Tags.Connecting: return event.type == EventTags.CheckingLocalPlayerInfo ? State.CheckingLocalPlayerInfo() : state;
         case Tags.CheckingLocalPlayerInfo: return state;
         default: Never(state);

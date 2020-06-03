@@ -1,5 +1,5 @@
-import * as ViewState from './viewState';
-import * as ContextualState from './context';
+import * as ViewState from './view/state';
+import * as ContextualState from './context/state';
 
 export type State = {
     viewState: ViewState.State,

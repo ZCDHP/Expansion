@@ -1,5 +1,5 @@
-import * as Union from "../infrastructure/union";
-import { ConstructorMap } from "../infrastructure/utils";
+import * as Union from "../../infrastructure/union";
+import { ConstructorMap } from "../../infrastructure/utils";
 
 import { Command as ConnectionCommand } from "./commands.connection";
 import { Command as LoginCommand } from "./commands.login";

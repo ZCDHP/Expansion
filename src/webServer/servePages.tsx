@@ -9,7 +9,7 @@ const Manifest: { [key in Bundles]: string } = require("../www/manifest.json");
 import InitialState from './initialState';
 import { AppView } from '../client/components/appView'
 
-import { InitialState as InitialViewState, State as ViewState } from "../client/viewState";
+import { InitialState as InitialViewState, State as ViewState } from "../client/view/state";
 
 
 const HTML = (state: ViewState) => (

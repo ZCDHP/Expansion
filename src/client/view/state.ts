@@ -1,9 +1,9 @@
-import { Never } from "../infrastructure/utils";
-import * as EventDef from "../infrastructure/event";
+import { Never } from "../../infrastructure/utils";
+import * as EventDef from "../../infrastructure/event";
 
 import { Event, Tags as EventTags } from './events'
-import * as Connection from "./viewState.connection";
-import * as Login from "./viewState.login";
+import * as Connection from "./state.connection";
+import * as Login from "./state.login";
 
 export type State = {
     Connection: Connection.State,

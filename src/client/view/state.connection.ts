@@ -1,6 +1,6 @@
-import * as Union from "../infrastructure/union";
-import { Never } from "../infrastructure/utils";
-import * as EventDef from "../infrastructure/event";
+import * as Union from "../../infrastructure/union";
+import { Never } from "../../infrastructure/utils";
+import * as EventDef from "../../infrastructure/event";
 
 import { Event, Tags as EventTags } from "./events.connection";
 

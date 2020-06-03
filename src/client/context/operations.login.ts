@@ -1,5 +1,5 @@
-import { Event, Tags as EventTags } from "./events.login";
-import { Command } from "./commands";
+import { Event, Tags as EventTags } from "../view/events.login";
+import { Command } from "../view/commands";
 
 type State = never;
 

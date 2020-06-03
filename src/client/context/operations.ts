@@ -1,10 +1,10 @@
-import { Event, Tags as EventTags } from "./events";
-import { Command } from "./commands";
-import { State } from "./context";
-import { Message, Tags as MessageTags } from "./message.server";
+import { Event, Tags as EventTags } from "../view/events";
+import { Command } from "../view/commands";
+import { State } from "./state";
+import { Message, Tags as MessageTags } from "../message.server";
 
-import { Tags as ConnectionEventTags } from "./events.connection";
-import { Tags as LoginEventTags } from "./events.login";
+import { Tags as ConnectionEventTags } from "../view/events.connection";
+import { Tags as LoginEventTags } from "../view/events.login";
 
 
 export const PushEvent: (event: Event) => (onCommand: (command: Command) => void) => (stats: State) => State = event => {
