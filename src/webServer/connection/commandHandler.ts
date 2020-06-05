@@ -6,13 +6,10 @@ import { Never } from "../../infrastructure/utils";
 export const CommandHandler: (state: State) => (cmd: Command) => Event[] = state => cmd => {
     switch (cmd.type) {
         case CommandTags.Connect: switch (state.type) {
-            case StateTags.NotConnected: return [Event.ConnectionRejected({ reason: "Test Rejection" })]// return [Event.Connected()];
+            case StateTags.NotConnected: return [Event.Connected()];
             default: return [];
         }
-        case CommandTags.Login: switch (state.type) {
-            case StateTags.LoggedOut: return [Event.LoginAttempted(cmd.data)];
-            default: return [];
-        }
+        case CommandTags.Anything: return [];
         default: Never(cmd);
     }
 };

@@ -1,0 +1,3 @@
+- Server Reject connection if not logged in in given time
+- Client Login state react to connection failing
+- Get rid of GConnection service, should be login service

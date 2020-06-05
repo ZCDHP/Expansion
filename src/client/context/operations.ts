@@ -4,7 +4,8 @@ import { State } from "./state";
 import { Message, Tags as MessageTags } from "../message.server";
 
 import { Tags as ConnectionEventTags } from "../view/events.connection";
-import { Tags as LoginEventTags } from "../view/events.login";
+
+import { PushEvent as LoginOperations } from "./operations.login";
 
 
 export const PushEvent: (event: Event) => (onCommand: (command: Command) => void) => (stats: State) => State = event => {
@@ -14,10 +15,7 @@ export const PushEvent: (event: Event) => (onCommand: (command: Command) => void
             case ConnectionEventTags.Connected:
             default: return _ => state => state;
         }
-        case EventTags.Login: switch (event.data.type) {
-            case LoginEventTags.CheckingLocalPlayerInfo: return RestoreLocalPlayerInfo();
-            default: return _ => state => state;
-        }
+        case EventTags.Login: return LoginOperations(event.data);
         default: return _ => state => state;
     }
 };
@@ -34,6 +32,7 @@ const Connection_Connect: () => (onCommand: (command: Command) => void) => (stat
         const message = JSON.parse(e.data as string) as Message;
         switch (message.type) {
             case MessageTags.ConnectionRejected: return onCommand(Command.Connection.Rejected(message.data));
+            case MessageTags.ApproveLogin: return onCommand(Command.Login.LoginApproved());
             default: return;
         }
     };
@@ -46,13 +45,3 @@ const Connection_Connect: () => (onCommand: (command: Command) => void) => (stat
         }
     };
 }
-
-const RestoreLocalPlayerInfo: () => (onCommand: (command: Command) => void) => (stats: State) => State = () => onCommand => state => {
-    const playerId = localStorage.getItem("playerId");
-
-    onCommand(Command.Login.RestoredLocalPlayerInfo(playerId ? { playerId: Number(playerId) } : null));
-
-    return state;
-};
-
-

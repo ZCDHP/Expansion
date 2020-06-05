@@ -9,7 +9,7 @@ const JSONConfig = require("./gConnection.json") as JSONConfig;
 
 const Prefix = "GConnection";
 
-export const GConnectionConfig = {
+export const Config = {
     ...JSONConfig,
     SubjectForCommands: (playerId: number) => `${Prefix}.Command.${playerId}`,
     SubjectForAllCommands: `${Prefix}.Command.*`,
@@ -19,4 +19,4 @@ export const GConnectionConfig = {
     RedisKeyForPlayer: (playerId: number) => `Player.${playerId}`,
 };
 
-export type Config = typeof GConnectionConfig;
+export type Config = typeof Config;

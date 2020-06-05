@@ -29,18 +29,13 @@ const CompleteCommands: (issueCommandCallback: (command: Command) => void) => (c
         });
 }
 
-export class App extends React.Component<ViewSate.State, AppState>{
-    constructor(props: ViewSate.State) {
-        super(props);
-        this.state = {
-            viewState: props,
-            contextualState: InitialContextualState,
-        };
-    }
+export const App = (initialViewState: ViewSate.State) => {
+    const [state, setState] = React.useState<AppState>({
+        viewState: initialViewState,
+        contextualState: InitialContextualState,
+    });
 
-    issueCommand(command: Command) {
-        this.setState(CompleteCommands(this.issueCommand.bind(this))([command]));
-    }
+    const issueCommand = (command: Command) => setState(CompleteCommands(issueCommand)([command]));
 
-    render() { return <AppView state={this.state.viewState} issueCommand={command => this.issueCommand(command)}></AppView>; }
+    return <AppView state={state.viewState} issueCommand={command => issueCommand(command)}></AppView>;
 }

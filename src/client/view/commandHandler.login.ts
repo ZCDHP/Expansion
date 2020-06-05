@@ -18,7 +18,7 @@ export const CommandHandler: (state: ViewState) => (cmd: Command) => Event[] = s
 
 const HandleConnectionCommands: (state: ViewState) => (cmd: ConnectionCommand) => Event[] = state => cmd => {
     switch (cmd.type) {
-        case ConnectionCommandTags.Connected: return state.Login.type == LoginStateTags.Connecting ? [Event.Login.CheckingLocalPlayerInfo()] : [];
+        case ConnectionCommandTags.Connected: return state.Login.type == LoginStateTags.Connecting ? [Event.Login.LoggingIn()] : [];
         default: return [];
     }
 }
@@ -29,11 +29,12 @@ const HandleLoginCommands: (state: ViewState) => (cmd: LoginCommand) => Event[] 
             if (state.Login.type != LoginStateTags.None)
                 return [];
             return state.Connection.type == ConnectionStateTags.Connected ?
-                [Event.Login.CheckingLocalPlayerInfo()] :
+                [Event.Login.LoggingIn()] :
                 [Event.Login.Connecting(), Event.Connection.Connecting()];
         }
-        case LoginCommandTags.Connected: return state.Login.type == LoginStateTags.Connecting ? [Event.Login.CheckingLocalPlayerInfo()] : [];
-        case LoginCommandTags.RestoredLocalPlayerInfo: return [];
+        case LoginCommandTags.Connected: return state.Login.type == LoginStateTags.Connecting ? [Event.Login.LoggingIn()] : [];
+        case LoginCommandTags.Login: return (state.Login.type == LoginStateTags.None || state.Login.type == LoginStateTags.Connecting) ? [Event.Login.LoggingIn()] : [];
+        case LoginCommandTags.LoginApproved: return state.Login.type == LoginStateTags.LoggingIn ? [Event.Login.LoggedIn()] : [];
         default: Never(cmd);
     }
 }

@@ -3,7 +3,7 @@ require('source-map-support').install();
 import { connect as NatsConnect } from "ts-nats";
 
 import { Config as CommonConfig } from '../config/common';
-import { GConnectionConfig as GConnectionConfig } from '../config/gConnection';
+import { Config as Config } from '../config/gConnection';
 
 import { Reduce } from "../infrastructure/event";
 import { MessageBus } from '../infrastructure/messageBus';
@@ -102,10 +102,10 @@ async function main() {
     });
 
     console.log(JSON.stringify(CommonConfig));
-    console.log(JSON.stringify(GConnectionConfig));
+    console.log(JSON.stringify(Config));
     const natsClient = await NatsConnect(CommonConfig.eventBusNatsUrl);
 
-    const targetMessageBus = TargetMessageBus(natsClient, GConnectionConfig);
+    const targetMessageBus = TargetMessageBus(natsClient, Config);
 
     const report = await Test(script, targetMessageBus, Id, Id);
 
