@@ -4,6 +4,7 @@ import { WebConfig } from '../../config/webServer';
 
 import * as EventDef from '../../infrastructure/event';
 import { Locker as InMemoryLocker } from '../../infrastructure/locker.inMemory';
+import { MessageBus as MB } from "../../infrastructure/messageBus.inMemory";
 
 import * as ConnectionState from './projection';
 import { CommandHandler } from './commandHandler';
@@ -36,3 +37,6 @@ export const Service = (webConfig: WebConfig) => {
 
     return issueCommand;
 }
+
+
+export const MessageBus = (webConfig: WebConfig) => MB(Service(webConfig));

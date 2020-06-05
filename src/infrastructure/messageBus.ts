@@ -1,6 +1,6 @@
 import * as Nats from "ts-nats";
 
-import { Id } from "./utils";
+import { Serializer } from "./messageBus.serializer"
 
 
 export type MessageBus<Command, Event, AggregationId> = {
@@ -10,22 +10,6 @@ export type MessageBus<Command, Event, AggregationId> = {
     subscribeEvent: (onData: (aggregationId: AggregationId, event: Event) => void, onError?: (err: Nats.NatsError) => void) => void,
 }
 
-export type Serializer<T> = {
-    serialize: (v: T) => string,
-    deserialize: (s: string) => T
-};
-
-export namespace Serializer {
-    export const String: Serializer<string> = {
-        serialize: Id,
-        deserialize: Id,
-    }
-
-    export const Number: Serializer<number> = {
-        serialize: n => n.toString(),
-        deserialize: parseInt,
-    };
-}
 
 export const MessageBus: <Command, Event, AggregationId>(client: Nats.Client, streamName: string, serializer: Serializer<AggregationId>) => MessageBus<Command, Event, AggregationId> = (client, streamName, serializer) => {
     return {
