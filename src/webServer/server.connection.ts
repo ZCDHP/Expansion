@@ -49,6 +49,7 @@ export const HandleConnection: (config: WebConfig) => koa_ws.Middleware<any, {}>
         inMemoryConnectionState = InMemoryConnection.Operations.Add(sessionId)(connection)(inMemoryConnectionState)
 
         connection.onmessage = e => completeEvent(ServeConnectionEventInput.Input.ClientMessage({ sessionId, message: JSON.parse(e.data as string) }));
+        connection.onclose = _ => connectionMessageBus.publishCommand(sessionId, ConnectionCommand.Disconnect());
 
         connectionMessageBus.publishCommand(sessionId, ConnectionCommand.Connect());
     }

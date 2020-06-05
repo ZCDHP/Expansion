@@ -19,8 +19,8 @@ const HTML = (state: ViewState) => (
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <meta name="description" content="Expansion - The Card Game" />
             <InitialState {...state} />
-            <script src={`/${Manifest[Bundles.vendor]}`}></script>
-            <script src={`/${Manifest[Bundles.app]}`}></script>
+            <script async src={`/${Manifest[Bundles.vendor]}`}></script>
+            <script async src={`/${Manifest[Bundles.app]}`}></script>
         </head>
         <body>
             <div id="app">

@@ -9,6 +9,7 @@ export const CommandHandler: (state: State) => (cmd: Command) => Event[] = state
             case StateTags.NotConnected: return [Event.Connected()];
             default: return [];
         }
+        case CommandTags.Disconnect: return state.type == StateTags.NotConnected ? [] : [Event.Disconnected()];
         case CommandTags.Anything: return [];
         default: Never(cmd);
     }

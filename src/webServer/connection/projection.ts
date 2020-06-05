@@ -26,6 +26,7 @@ export const Reducer: Event.Reducer<State, Events.Event> = state => event => {
             case Tags.NotConnected: return State.LoggedOut();
             default: return state;
         }
+        case Events.Tags.Disconnected: return State.NotConnected();
         case Events.Tags.Anything: return state;
         default: Never(event);
     }

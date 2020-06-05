@@ -13,11 +13,23 @@ export type Operation = (state: State) => State;
 export const Composition: (...operations: Operation[]) => Operation = (...operations: Operation[]) => state => operations.reduce<State>((s, op) => op(s), state);
 
 export const Add: (id: number) => (connection: ws) => Operation = id => connection => state => {
-    //connection.onmessage = e => onMessage(JSON.parse(e.data as string));
     return {
         ...state,
         [id]: connection,
     };
+}
+
+export const Disconnect: (id: number) => Operation = id => state => {
+    state[id].onerror = _ => { };
+    state[id].onmessage = _ => { };
+    state[id].onclose = _ => { };
+
+    state[id].close();
+
+    const newState = { ...state };
+    delete newState[id];
+
+    return newState;
 }
 
 export const Send: (id: number) => (message: ServerMessage) => Operation = id => message => state => {
@@ -28,5 +40,6 @@ export const Send: (id: number) => (message: ServerMessage) => Operation = id =>
 export const Operations = {
     Composition,
     Add,
+    Disconnect,
     Send,
 };
