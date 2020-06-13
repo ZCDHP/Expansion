@@ -1,6 +1,6 @@
 import React from "react"
 
-import { State as ViewState } from "../client/view/state";
+import { State as ViewState } from "../client/domain/domain";
 
 const InitialState = (state: ViewState) => (
     <script dangerouslySetInnerHTML={{

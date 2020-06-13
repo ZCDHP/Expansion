@@ -2,40 +2,32 @@ import React from "react";
 
 import { Reduce } from "../../infrastructure/event";
 
-import * as ViewSate from '../view/state';
-import { State as AppState } from '../appState';
-import { InitialState as InitialContextualState } from '../context/state';
+
+import * as Domain from "../domain/domain";
+import { CommandHandler } from "../domain/domain.commandHandler";
+import { Subscription } from "../domain/domain.subscription";
+import * as Context from "../context/context";
+
 import { AppView } from './appView';
-import { Command } from "../view/commands";
-import { CommandHandler } from "../view/commandHandler";
-import { PushEvent } from "../context/operations";
 
+type State = [Domain.State, Context.State]
 
-const CompleteCommands: (issueCommandCallback: (command: Command) => void) => (commands: Command[]) => (state: AppState) => AppState = issueCommandCallback => commands => state => {
-    if (commands.length == 0)
-        return state;
+const ExecuteCommand: (issueCommand: (command: Domain.Command) => void) => (command: Domain.Command) => (state: State) => State = issueCommand => command => ([domain, context]) => {
+    const events = CommandHandler(domain)(command);
 
-    const events = CommandHandler(state.viewState)(commands[0]);
-    const newViewState = Reduce(ViewSate.Reducer)(state.viewState)(events);
-    const newContextualState = events.reduce((s, e) => PushEvent(e)(issueCommandCallback)(s), state.contextualState);
+    const newDomain = Reduce(Domain.State.Reducer)(domain)(events);
+    const newContext = events.reduce((c, event) => Context.Subscription(issueCommand)(event)(c), context);
 
-    return CompleteCommands
-        (issueCommandCallback)
-        ([...commands.slice(1)])
-        ({
-            ...state,
-            contextualState: newContextualState,
-            viewState: newViewState,
-        });
-}
+    return events
+        .map(e => Subscription(e)(domain))
+        .reduce<Domain.Command[]>((result, commands) => [...result, ...commands], [])
+        .reduce<[Domain.State, Context.State]>((state, cmd) => ExecuteCommand(issueCommand)(cmd)(state), [newDomain, newContext]);
+};
 
-export const App = (initialViewState: ViewSate.State) => {
-    const [state, setState] = React.useState<AppState>({
-        viewState: initialViewState,
-        contextualState: InitialContextualState,
-    });
+export const App = (initialState: Domain.State) => {
+    let [state, setState] = React.useState<[Domain.State, Context.State]>([initialState, Context.State.Initial()]);
 
-    const issueCommand = (command: Command) => setState(CompleteCommands(issueCommand)([command]));
+    const issueCommand = (command: Domain.Command) => setState(ExecuteCommand(issueCommand)(command));
 
-    return <AppView state={state.viewState} issueCommand={command => issueCommand(command)}></AppView>;
+    return <AppView state={state[0]} issueCommand={command => issueCommand(command)}></AppView>;
 }

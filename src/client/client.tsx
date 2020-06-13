@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom";
 import React from "react";
 
-import { State as ViewState } from "./view/state";
+import { State as ViewState } from "./domain/domain";
 import { App } from "./components/app";
 
 const domReady = new Promise(r => {

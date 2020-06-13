@@ -1,4 +1,4 @@
-import { Event as ConnectionEvent } from "../../contracts/events.connection";
+import { Event as ConnectionEvent } from "../../contracts/connection.events";
 import { Event, Command, CommandHandler } from "./domain";
 
 type Subscription = (e: ConnectionEvent) => void;

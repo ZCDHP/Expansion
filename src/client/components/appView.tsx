@@ -1,8 +1,7 @@
 import React from "react";
 import { createGlobalStyle } from "styled-components";
 
-import { State } from "../view/state";
-import { Command } from "../view/commands";
+import { State, Command } from "../domain/domain";
 
 const GlobalStyle = createGlobalStyle`
     * {
@@ -23,7 +22,7 @@ export const AppView = ({ state, issueCommand }: Props) => {
             <GlobalStyle />
             <h1>Connection: {JSON.stringify(state.Connection)}</h1>
             <h1>Login: {JSON.stringify(state.Login)}</h1>
-            {state.Login.type == "None" && <button onClick={_ => issueCommand(Command.Constructor.Login.Start())}> Login </button>}
+            {state.Login.type == "None" && <button onClick={_ => issueCommand(Command.Constructor.MatchFinding.Start())}> Login </button>}
         </>
     )
 }

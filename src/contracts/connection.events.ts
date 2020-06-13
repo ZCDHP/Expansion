@@ -1,6 +1,6 @@
 import * as Union from "../infrastructure/union";
 
-import { Message as ClientMessage } from './message.client';
+import { Message as ClientMessage } from './clientMessage';
 
 
 export namespace Event {

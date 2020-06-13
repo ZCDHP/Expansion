@@ -9,7 +9,7 @@ const Manifest: { [key in Bundles]: string } = require("../www/manifest.json");
 import InitialState from './initialState';
 import { AppView } from '../client/components/appView'
 
-import { InitialState as InitialViewState, State as ViewState } from "../client/view/state";
+import { State as ViewState } from "../client/domain/domain";
 
 
 const HTML = (state: ViewState) => (
@@ -24,7 +24,7 @@ const HTML = (state: ViewState) => (
         </head>
         <body>
             <div id="app">
-                <AppView state={InitialViewState} issueCommand={_ => { }}></AppView>
+                <AppView state={ViewState.Initial} issueCommand={_ => { }}></AppView>
             </div>
         </body>
     </html>
@@ -32,7 +32,7 @@ const HTML = (state: ViewState) => (
 
 const PageStream = () => {
     const sheet = new ServerStyleSheet()
-    const jsx = sheet.collectStyles(HTML(InitialViewState));
+    const jsx = sheet.collectStyles(HTML(ViewState.Initial));
     return sheet.interleaveWithNodeStream(ReactDOM.renderToNodeStream(jsx))
 }
 

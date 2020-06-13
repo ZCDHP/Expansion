@@ -1,6 +1,6 @@
 import * as Union from "../../infrastructure/union";
 
-import { Message as ServerMessage } from "../../contracts/message.server";
+import { Message as ServerMessage } from "../../contracts/serverMessage";
 
 export namespace Operation {
     export const Tags = {

@@ -3,10 +3,10 @@ import ws from 'ws';
 import { Never } from '../../infrastructure/utils';
 import * as NumberSequence from '../../infrastructure/numberSequence';
 
-import { Message as ServerMessage } from '../../contracts/message.server';
+import { Message as ServerMessage } from '../../contracts/serverMessage';
 
 
-import { Event } from "../../contracts/events.connection";
+import { Event } from "../../contracts/connection.events";
 import { State } from "./eventSource";
 import { Operation } from "./operations";
 
@@ -32,7 +32,7 @@ export const Service: (eventHandler: EventHandler) => Service = eventHandler => 
         Apply: (connectionId, operation) => {
             switch (operation.type) {
                 case Operation.Tags.Reject:
-                    state = State.Send(connectionId)(ServerMessage.ConnectionRejected({ reason: operation.data.reason }))(state);
+                    state = State.Send(connectionId)(ServerMessage.Constructor.Connection.Reject({ reason: operation.data.reason }))(state);
                     state = State.Close(eventHandler)(connectionId)(state);
                     return;
                 case Operation.Tags.Send:

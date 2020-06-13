@@ -1,7 +1,7 @@
 import ws from 'ws';
 import { Map } from "../../infrastructure/map";
 
-import { Message as ServerMessage } from "../../contracts/message.server";
+import { Message as ServerMessage } from "../../contracts/serverMessage";
 
 import { Event } from "./events";
 

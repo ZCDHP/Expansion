@@ -1,1 +1,1 @@
-export { Event } from "../../contracts/events.connection"
+export { Event } from "../../contracts/connection.events"
