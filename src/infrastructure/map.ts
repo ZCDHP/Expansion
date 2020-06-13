@@ -5,16 +5,16 @@ export type Map<Key extends (number | string), Value> = {
 export namespace Map {
     export const Empty: <Key extends (number | string), Value>() => Map<Key, Value> = <Key extends (number | string), Value>() => ({} as Map<Key, Value>);
 
-    export const Set: <Key extends (number | string), Value>(map: Map<Key, Value>) => (key: Key, value: Value) => Map<Key, Value> = map => (key, value) => ({
+    export const Set: <Key extends (number | string), Value>(key: Key, value: Value) => (map: Map<Key, Value>) => Map<Key, Value> = (key, value) => map => ({
         ...map,
         [key]: value,
     });
 
     export const Map: <Key extends (number | string), Value>(map: Map<Key, Value>) => <ValueOut>(f: (v: Value) => ValueOut) => Map<Key, ValueOut> =
         <Key extends (number | string), Value>(map: Map<Key, Value>) => <ValueOut>(f: (v: Value) => ValueOut) =>
-            Object.keys(map).reduce<Map<Key, ValueOut>>((result, key) => Set(result)(key as any as Key, f(map[key as any as Key])), Empty());
+            Object.keys(map).reduce<Map<Key, ValueOut>>((result, key) => Set(key as any as Key, f(map[key as any as Key]))(result), Empty());
 
-    export const Remove: <Key extends (number | string), Value>(map: Map<Key, Value>) => (key: Key) => Map<Key, Value> = map => key => {
+    export const Remove: <Key extends (number | string) > (key: Key) => <Value>(map: Map<Key, Value>) => Map<Key, Value> = key => map => {
         const newMap = { ...map };
         delete newMap[key];
         return newMap;

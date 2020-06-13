@@ -1,40 +1,40 @@
 import { Never } from "../../infrastructure/utils";
 
 import { State as ViewState } from "./state";
-import { Tags as ConnectionStateTags } from "./state.connection";
-import { Tags as LoginStateTags } from "./state.login";
+import { State as ConnectionState } from "./state.connection";
+import { State as LoginState } from "./state.login";
 import { Event } from './events'
-import { Command, Tags as CommandTags } from './commands';
-import { Command as ConnectionCommand, Tags as ConnectionCommandTags } from './commands.connection';
-import { Command as LoginCommand, Tags as LoginCommandTags } from './commands.login';
+import { Command } from './commands';
+import { Command as ConnectionCommand } from './commands.connection';
+import { Command as LoginCommand } from './commands.login';
 
 export const CommandHandler: (state: ViewState) => (cmd: Command) => Event[] = state => cmd => {
     switch (cmd.type) {
-        case CommandTags.Connection: return HandleConnectionCommands(state)(cmd.data);
-        case CommandTags.Login: return HandleLoginCommands(state)(cmd.data);
+        case Command.Tags.Connection: return HandleConnectionCommands(state)(cmd.data);
+        case Command.Tags.Login: return HandleLoginCommands(state)(cmd.data);
         default: return [];
     }
 };
 
 const HandleConnectionCommands: (state: ViewState) => (cmd: ConnectionCommand) => Event[] = state => cmd => {
     switch (cmd.type) {
-        case ConnectionCommandTags.Connected: return state.Login.type == LoginStateTags.Connecting ? [Event.Login.LoggingIn()] : [];
+        case ConnectionCommand.Tags.Connected: return state.Login.type == LoginState.Tags.Connecting ? [Event.Constructor.Login.LoggingIn()] : [];
         default: return [];
     }
 }
 
 const HandleLoginCommands: (state: ViewState) => (cmd: LoginCommand) => Event[] = state => cmd => {
     switch (cmd.type) {
-        case LoginCommandTags.Start: {
-            if (state.Login.type != LoginStateTags.None)
+        case LoginCommand.Tags.Start: {
+            if (state.Login.type != LoginState.Tags.None)
                 return [];
-            return state.Connection.type == ConnectionStateTags.Connected ?
-                [Event.Login.LoggingIn()] :
-                [Event.Login.Connecting(), Event.Connection.Connecting()];
+            return state.Connection.type == ConnectionState.Tags.Connected ?
+                [Event.Constructor.Login.LoggingIn()] :
+                [Event.Constructor.Login.Connecting(), Event.Constructor.Connection.Connecting()];
         }
-        case LoginCommandTags.Connected: return state.Login.type == LoginStateTags.Connecting ? [Event.Login.LoggingIn()] : [];
-        case LoginCommandTags.Login: return (state.Login.type == LoginStateTags.None || state.Login.type == LoginStateTags.Connecting) ? [Event.Login.LoggingIn()] : [];
-        case LoginCommandTags.LoginApproved: return state.Login.type == LoginStateTags.LoggingIn ? [Event.Login.LoggedIn()] : [];
+        case LoginCommand.Tags.Connected: return state.Login.type == LoginState.Tags.Connecting ? [Event.Constructor.Login.LoggingIn()] : [];
+        case LoginCommand.Tags.Login: return (state.Login.type == LoginState.Tags.None || state.Login.type == LoginState.Tags.Connecting) ? [Event.Constructor.Login.LoggingIn()] : [];
+        case LoginCommand.Tags.LoginApproved: return state.Login.type == LoginState.Tags.LoggingIn ? [Event.Constructor.Login.LoggedIn()] : [];
         default: Never(cmd);
     }
 }

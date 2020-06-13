@@ -1,12 +1,12 @@
 import { State } from "./state";
-import { Event, Tags as EventTags } from "../view/events.login";
+import { Event } from "../view/events.login";
 import { Command } from "../view/commands";
 
-import { Message } from "../message.client";
+import { Message } from "../../contracts/message.client";
 
 export const PushEvent: (event: Event) => (onCommand: (command: Command) => void) => (stats: State) => State = event => {
     switch (event.type) {
-        case EventTags.LoggingIn: return Login();
+        case Event.Tags.LoggingIn: return Login();
         default: return _ => state => state;
     }
 };

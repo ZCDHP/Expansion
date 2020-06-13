@@ -1,0 +1,9 @@
+#!/bin/bash
+
+rm -rf ./dist
+./node_modules/.bin/tsc -p ./src/building/tsconfig.json 
+./node_modules/.bin/webpack --config ./dist/building/webpack.config.js 
+./node_modules/.bin/tsc -p ./src/webServer/tsconfig.json
+cp -r ./src/config/production/. ./dist/config/.
+
+node ./dist/webServer/server.js

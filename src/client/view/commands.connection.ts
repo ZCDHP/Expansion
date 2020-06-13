@@ -1,23 +1,32 @@
 import * as Union from "../../infrastructure/union";
 
-export const Tags = {
-    Connecting: "Connecting",
-    Connected: "Connected",
-    Rejected: "Rejected",
-} as const;
-export type Tags = typeof Tags;
 
-export type Connecting = Union.Case<Tags["Connecting"], void>;
-export type Connected = Union.Case<Tags["Connected"], void>;
-export type Rejected = Union.Case<Tags["Rejected"], { reason: string }>;
+export namespace Command {
+    export const Tags = {
+        Connecting: "Connecting",
+        Connected: "Connected",
+        Rejected: "Rejected",
+    } as const;
+    export type Tags = typeof Tags;
+
+    export type Connecting = Union.Case<Tags["Connecting"], void>;
+    export const Connecting = Union.Case(Tags.Connecting)<void>();
+
+    export type Connected = Union.Case<Tags["Connected"], void>;
+    export const Connected = Union.Case(Tags.Connected)<void>();
+
+    export type Rejected = Union.Case<Tags["Rejected"], { reason: string }>;
+    export const Rejected = Union.Case(Tags.Rejected)<{ reason: string }>();
+
+
+    export const Constructor = {
+        Connecting,
+        Connected,
+        Rejected,
+    }
+}
 
 export type Command =
-    | Connecting
-    | Connected
-    | Rejected
-
-export const Command = {
-    Connecting: Union.Case(Tags.Connecting)<void>(),
-    Connected: Union.Case(Tags.Connected)<void>(),
-    Rejected: Union.Case(Tags.Rejected)<{ reason: string }>(),
-}
+    | Command.Connecting
+    | Command.Connected
+    | Command.Rejected

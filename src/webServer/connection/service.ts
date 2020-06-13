@@ -1,42 +1,45 @@
-import Redis from 'ioredis';
+import ws from 'ws';
 
-import { WebConfig } from '../../config/webServer';
+import { Never } from '../../infrastructure/utils';
+import * as NumberSequence from '../../infrastructure/numberSequence';
 
-import * as EventDef from '../../infrastructure/event';
-import { Locker as InMemoryLocker } from '../../infrastructure/locker.inMemory';
-import { MessageBus as MB } from "../../infrastructure/messageBus.inMemory";
-
-import * as ConnectionState from './projection';
-import { CommandHandler } from './commandHandler';
-import { Command } from './commands';
+import { Message as ServerMessage } from '../../contracts/message.server';
 
 
-export const Service = (webConfig: WebConfig) => {
-    const redisConnection = new Redis(webConfig.redis.port, webConfig.redis.host);
-    const locker = InMemoryLocker();
+import { Event } from "../../contracts/events.connection";
+import { State } from "./eventSource";
+import { Operation } from "./operations";
 
-    const issueCommand = (sessionId: number) => (command: Command) => {
-        const redisKey = webConfig.RedisKeyForSession(sessionId);
-        return locker(sessionId)(async () => {
-            const cached = await redisConnection.get(redisKey);
-            const sessionState = cached ?
-                JSON.parse(cached) as ConnectionState.State :
-                ConnectionState.Projection.initialState;
 
-            const events = CommandHandler(sessionState)(command);
-            const newSessionState = EventDef.Reduce(ConnectionState.Reducer)(sessionState)(events);
+type EventHandler = (e: Event) => void;
 
-            if (newSessionState.type == ConnectionState.Projection.initialState.type)
-                await redisConnection.del(redisKey);
-            else
-                await redisConnection.set(redisKey, JSON.stringify(newSessionState));
+export type Service = {
+    AddConnection: (connection: ws) => void,
+    Apply: (connectionId: number, operation: Operation) => void,
+};
 
-            return events;
-        });
-    }
+export const Service: (eventHandler: EventHandler) => Service = eventHandler => {
+    let state = State.Empty();
+    let connectionIdStream = NumberSequence.Init();
 
-    return issueCommand;
+    return {
+        AddConnection: connection => {
+            const connectionId = connectionIdStream;
+            connectionIdStream = NumberSequence.Next(connectionIdStream);
+            state = State.AddConnection(eventHandler)(connectionId)(connection)(state);
+        },
+
+        Apply: (connectionId, operation) => {
+            switch (operation.type) {
+                case Operation.Tags.Reject:
+                    state = State.Send(connectionId)(ServerMessage.ConnectionRejected({ reason: operation.data.reason }))(state);
+                    state = State.Close(eventHandler)(connectionId)(state);
+                    return;
+                case Operation.Tags.Send:
+                    state = State.Send(connectionId)(operation.data)(state);
+                    return;
+                default: Never(operation);
+            }
+        }
+    };
 }
-
-
-export const MessageBus = (webConfig: WebConfig) => MB(Service(webConfig));

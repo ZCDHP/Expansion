@@ -1,13 +1,13 @@
 import { Never } from "../../infrastructure/utils";
 import * as EventDef from "../../infrastructure/event";
 
-import { Event, Tags as EventTags } from './events'
-import * as Connection from "./state.connection";
-import * as Login from "./state.login";
+import { Event } from './events'
+import { State as Connection } from "./state.connection";
+import { State as Login } from "./state.login";
 
 export type State = {
-    Connection: Connection.State,
-    Login: Login.State,
+    Connection: Connection,
+    Login: Login,
 };
 
 export const InitialState: State = {
@@ -17,11 +17,11 @@ export const InitialState: State = {
 
 export const Reducer: EventDef.Reducer<State, Event> = state => event => {
     switch (event.type) {
-        case EventTags.Connection: return {
+        case Event.Tags.Connection: return {
             ...state,
             Connection: Connection.Reducer(state.Connection)(event.data),
         };
-        case EventTags.Login: return {
+        case Event.Tags.Login: return {
             ...state,
             Login: Login.Reducer(state.Login)(event.data),
         };

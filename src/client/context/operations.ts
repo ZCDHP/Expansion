@@ -1,38 +1,38 @@
-import { Event, Tags as EventTags } from "../view/events";
+import { Event } from "../view/events";
 import { Command } from "../view/commands";
 import { State } from "./state";
-import { Message, Tags as MessageTags } from "../message.server";
+import { Message } from "../../contracts/message.server";
 
-import { Tags as ConnectionEventTags } from "../view/events.connection";
+import { Event as ConnectionEvent } from "../view/events.connection";
 
 import { PushEvent as LoginOperations } from "./operations.login";
 
 
-export const PushEvent: (event: Event) => (onCommand: (command: Command) => void) => (stats: State) => State = event => {
+export const PushEvent: (event: Event) => (issueCommand: (command: Command) => void) => (stats: State) => State = event => {
     switch (event.type) {
-        case EventTags.Connection: switch (event.data.type) {
-            case ConnectionEventTags.Connecting: return Connection_Connect();
-            case ConnectionEventTags.Connected:
+        case Event.Tags.Connection: switch (event.data.type) {
+            case ConnectionEvent.Tags.Connecting: return Connection_Connect();
+            case ConnectionEvent.Tags.Connected:
             default: return _ => state => state;
         }
-        case EventTags.Login: return LoginOperations(event.data);
+        case Event.Tags.Login: return LoginOperations(event.data);
         default: return _ => state => state;
     }
 };
 
 
-const Connection_Connect: () => (onCommand: (command: Command) => void) => (stats: State) => State = () => onCommand => state => {
+const Connection_Connect: () => (issueCommand: (command: Command) => void) => (stats: State) => State = () => issueCommand => state => {
     const protocol = location.protocol === 'https:' ? "wss" : "ws";
     const url = `${protocol}://${location.host}/`;
     const connection = new WebSocket(url);
 
-    connection.onopen = _ => onCommand(Command.Connection.Connected());
+    connection.onopen = _ => issueCommand(Command.Constructor.Connection.Connected());
 
     connection.onmessage = e => {
         const message = JSON.parse(e.data as string) as Message;
         switch (message.type) {
-            case MessageTags.ConnectionRejected: return onCommand(Command.Connection.Rejected(message.data));
-            case MessageTags.ApproveLogin: return onCommand(Command.Login.LoginApproved());
+            case Message.Tags.ConnectionRejected: return issueCommand(Command.Constructor.Connection.Rejected(message.data));
+            case Message.Tags.ApproveLogin: return issueCommand(Command.Constructor.Login.LoginApproved());
             default: return;
         }
     };

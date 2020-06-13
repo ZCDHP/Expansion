@@ -23,7 +23,7 @@ export const AppView = ({ state, issueCommand }: Props) => {
             <GlobalStyle />
             <h1>Connection: {JSON.stringify(state.Connection)}</h1>
             <h1>Login: {JSON.stringify(state.Login)}</h1>
-            {state.Login.type == "None" && <button onClick={_ => issueCommand(Command.Login.Start())}> Login </button>}
+            {state.Login.type == "None" && <button onClick={_ => issueCommand(Command.Constructor.Login.Start())}> Login </button>}
         </>
     )
 }
