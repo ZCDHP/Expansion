@@ -1,5 +1,5 @@
 import { Event, Command } from "../domain/domain";
-import { Event as ConnectionEvent } from "../domain/connection";
+import * as ConnectionDomain from "../domain/connection";
 import { Event as LoginEvent } from "../domain/login";
 import { Event as MatchFindingEvent } from "../domain/matchFinding";
 
@@ -16,34 +16,34 @@ export type State = {
 export const Subscription: (issueCommand: (cmd: Command) => void) => (event: Event) => (state: State) => State = issueCommand => event => state => {
     switch (event.type) {
         case Event.Tags.Connection: return Subscriptions.Connection(issueCommand)(event.data)(state);
-        case Event.Tags.Login: return Subscriptions.Login(issueCommand)(event.data)(state);
-        case Event.Tags.MatchFinding: return Subscriptions.MatchFinding(issueCommand)(event.data)(state);
         default: return state;
     }
 }
 
 namespace Subscriptions {
-    export const Connection: (issueCommand: (cmd: Command) => void) => (event: ConnectionEvent) => (state: State) => State = issueCommand => event => state => {
+    export const Connection: (issueCommand: (cmd: Command) => void) => (event: ConnectionDomain.Event) => (state: State) => State = issueCommand => event => state => {
         switch (event.type) {
-            case ConnectionEvent.Tags.Connecting: const protocol = location.protocol === 'https:' ? "wss" : "ws";
+            case ConnectionDomain.Event.Tags.Connecting: const protocol = location.protocol === 'https:' ? "wss" : "ws";
                 const url = `${protocol}://${location.host}/`;
                 const connection = new WebSocket(url);
 
-                connection.onopen = _ => issueCommand(Command.Constructor.Connection.Connected());
+                connection.onopen = _ => issueCommand(Command.Connection(ConnectionDomain.Command.Connected()));
                 connection.onmessage = e => issueCommand(Command.Deserialize(JSON.parse(e.data as string)));
 
                 return {
                     connection,
                 };
+            case ConnectionDomain.Event.Tags.LoginEvent: return Login(issueCommand)(event.data)(state);
             default: return state;
         }
     }
 
-    export const Login: (issueCommand: (cmd: Command) => void) => (event: LoginEvent) => (state: State) => State = _issueCommand => event => state => {
+    export const Login: (issueCommand: (cmd: Command) => void) => (event: LoginEvent) => (state: State) => State = issueCommand => event => state => {
         switch (event.type) {
             case LoginEvent.Tags.LoggingIn:
                 state.connection!.send(JSON.stringify(ClientMessage.Constructor.Login.Login()));
                 return state;
+            case LoginEvent.Tags.MatchFindingEvent: return MatchFinding(issueCommand)(event.data)(state);
             default: return state;
         }
     }
