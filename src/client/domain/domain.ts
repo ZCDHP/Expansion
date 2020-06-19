@@ -2,8 +2,6 @@ import * as Union from "../../infrastructure/union";
 import { Never } from "../../infrastructure/utils";
 import * as EventDef from "../../infrastructure/event";
 
-import { Message } from "../../contracts/serverMessage";
-
 import * as ConnectionDomain from "./connection";
 
 
@@ -19,14 +17,6 @@ export namespace Command {
 
     export type Connection = Union.Case<Tags["Connection"], ConnectionDomain.Command>;
     export const Connection = Union.Case(Tags.Connection)<ConnectionDomain.Command>();
-
-    export const Deserialize: (message: Message) => Command = message => {
-        switch (message.type) {
-            case Message.Tags.Connection: return Connection(ConnectionDomain.Command.Deserialize(message.data));
-            case Message.Tags.Login: return Connection(ConnectionDomain.Command.DeserializeLoginMessage(message.data));
-            default: Never(message);
-        }
-    };
 }
 
 export type Command =

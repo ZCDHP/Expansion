@@ -2,8 +2,6 @@ import * as Union from "../../infrastructure/union";
 import { Never } from "../../infrastructure/utils";
 import * as EventDef from "../../infrastructure/event";
 
-import { Message } from "../../contracts/server.login";
-
 import * as MatchFindingDomain from "./matchFinding";
 
 export namespace Command {
@@ -22,13 +20,6 @@ export namespace Command {
 
     export type MatchFindingCommand = Union.Case<Tags["MatchFindingCommand"], MatchFindingDomain.Command>;
     export const MatchFindingCommand = Union.Case(Tags.MatchFindingCommand)<MatchFindingDomain.Command>();
-
-    export const Deserialize: (message: Message) => Command = message => {
-        switch (message.type) {
-            case Message.Tags.Approve: return LoginApproved(message.data);
-            default: Never(message.type);
-        }
-    };
 }
 
 export type Command =

@@ -2,10 +2,8 @@ import { Never } from "../../infrastructure/utils";
 import * as Union from "../../infrastructure/union";
 import * as EventDef from "../../infrastructure/event";
 
-import { Message as ConnectionMessage } from "../../contracts/server.connection";
-import { Message as LoginMessage } from "../../contracts/server.login";
-
 import * as LoginDomain from "./login";
+
 
 export namespace Command {
     export const Tags = {
@@ -27,15 +25,6 @@ export namespace Command {
 
     export type LoginCommand = Union.Case<Tags["LoginCommand"], LoginDomain.Command>;
     export const LoginCommand = Union.Case(Tags.LoginCommand)<LoginDomain.Command>();
-
-    export const Deserialize: (message: ConnectionMessage) => Command = message => {
-        switch (message.type) {
-            case ConnectionMessage.Tags.Reject: return Rejected(message.data);
-            default: Never(message.type);
-        }
-    };
-
-    export const DeserializeLoginMessage: (message: LoginMessage) => Command = message => LoginCommand(LoginDomain.Command.Deserialize(message));
 }
 export type Command =
     | Command.Connect

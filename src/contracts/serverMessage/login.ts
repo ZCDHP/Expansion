@@ -1,4 +1,4 @@
-import * as Union from "../infrastructure/union";
+import * as Union from "../../infrastructure/union";
 
 export namespace Message {
     export const Tags = {

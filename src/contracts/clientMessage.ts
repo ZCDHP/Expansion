@@ -1,8 +1,11 @@
 import { ConstructorMap } from "../infrastructure/utils";
 import * as Union from "../infrastructure/union";
 
-import { Message as LoginMessage } from "./client.login";
-import { Message as MatchFindingMessage } from "./client.matchFinding";
+import { Message as LoginMessage } from "./clientMessage/login";
+export { Message as LoginMessage } from "./clientMessage/login";
+
+import { Message as MatchFindingMessage } from "./clientMessage/matchFinding";
+export { Message as MatchFindingMessage } from "./clientMessage/matchFinding";
 
 export namespace Message {
     export const Tags = {

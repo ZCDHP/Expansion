@@ -4,6 +4,7 @@ import { Event as LoginEvent } from "../domain/login";
 import { Event as MatchFindingEvent } from "../domain/matchFinding";
 
 import { Message as ClientMessage } from "../../contracts/clientMessage";
+import { Deserialize } from "../domain/commands";
 
 export namespace State {
     export const Initial: () => State = () => ({});
@@ -28,7 +29,7 @@ namespace Subscriptions {
                 const connection = new WebSocket(url);
 
                 connection.onopen = _ => issueCommand(Command.Connection(ConnectionDomain.Command.Connected()));
-                connection.onmessage = e => issueCommand(Command.Deserialize(JSON.parse(e.data as string)));
+                connection.onmessage = e => issueCommand(Deserialize(JSON.parse(e.data as string)));
 
                 return {
                     connection,

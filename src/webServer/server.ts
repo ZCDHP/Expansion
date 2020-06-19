@@ -32,10 +32,16 @@ async function main() {
     const matchFindingEventBroker = MessageBroker<MatchFinding.Event>();
 
     const connectionService = ConnectionService(connectionEventBroker.publish);
-    const matchFindingService = MatchFindingService(matchFindingEventBroker.publish);
-
-
     connectionEventBroker.subscribe(LoginService((id, _event) => connectionService.Apply(id, ConnectionOperation.Send(ServerMessage.Constructor.Login.Approve()))));
+
+    const matchFindingService = MatchFindingService(matchFindingEventBroker.publish);
+    matchFindingEventBroker.subscribe(event => {
+        switch (event.type) {
+            case "PlayerQueued": return connectionService.Apply(event.data.playerId, ConnectionOperation.Send(ServerMessage.Constructor.MatchFinding.Queued()));
+            case "MatchFound": return event.data.playerIds.forEach(playerId => connectionService.Apply(playerId, ConnectionOperation.Send(ServerMessage.Constructor.MatchFinding.MatchFound({ matchId: 1 }))))
+            default: return;
+        }
+    })
 
     connectionEventBroker.subscribe(e => {
         if (e.type != "MessageReceived")
@@ -47,6 +53,7 @@ async function main() {
             default: return;
         }
     });
+
 
     const app = koa_ws(new koa());
     const www = path.join(__dirname, "../www");
